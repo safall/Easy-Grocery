@@ -1,20 +1,14 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinx.serialization)
+    id("app.cash.sqldelight") version "2.0.1"
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
+    androidTarget()
 
     listOf(
         iosArm64(),
@@ -26,11 +20,18 @@ kotlin {
         }
     }
 
+    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
+        binaries.all {
+            linkerOpts("-lsqlite3") // ✅ link the native SQLite library
+        }
+    }
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
+            implementation("app.cash.sqldelight:android-driver:2.0.1")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -47,9 +48,16 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization.json)
+            implementation("app.cash.sqldelight:runtime:2.0.1") // Required for commonMai
+            implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        iosMain {
+            dependencies {
+                implementation("app.cash.sqldelight:native-driver:2.0.1")
+            }
         }
     }
 }
@@ -93,9 +101,18 @@ android {
 dependencies {
     debugImplementation(compose.uiTooling)
 }
-
 compose.resources {
     publicResClass = true
     packageOfResClass = "com.whitecatlabs.easygrocery.resources"
     generateResClass = auto
+}
+
+sqldelight {
+    databases {
+        create("EasyGroceryDatabase") {
+            packageName = "com.whitecatlabs.easygrocery"
+            srcDirs("src/commonMain/sqldelight")
+            version = 1
+        }
+    }
 }

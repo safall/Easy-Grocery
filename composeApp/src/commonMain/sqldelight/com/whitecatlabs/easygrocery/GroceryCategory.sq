@@ -1,0 +1,36 @@
+import kotlin.Boolean;
+
+CREATE TABLE IF NOT EXISTS groceryCategory (
+    id TEXT NOT NULL PRIMARY KEY,
+    isSelected INTEGER AS Boolean NOT NULL,
+    FOREIGN KEY (id) REFERENCES master_grocery(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+selectAll:
+SELECT * FROM groceryCategory;
+
+-- This replaces GroceryCategoryDao.fetchAll()
+-- Returns selected categories with their master_grocery info
+fetchAllSelected:
+SELECT
+    gc.id AS gc_id,
+    gc.isSelected AS gc_isSelected,
+    mg.id AS mg_id,
+    mg.title AS mg_title,
+    mg.color AS mg_color
+FROM groceryCategory gc
+INNER JOIN master_grocery mg ON gc.id = mg.id
+WHERE gc.isSelected = 1
+ORDER BY CAST(gc.id AS INTEGER) ASC;
+
+insert:
+INSERT OR REPLACE INTO groceryCategory(id, isSelected)
+VALUES (?, ?);
+
+updateSelected:
+UPDATE groceryCategory
+SET isSelected = ?
+WHERE id = ?;
+
+deleteById:
+DELETE FROM groceryCategory WHERE id = ?;

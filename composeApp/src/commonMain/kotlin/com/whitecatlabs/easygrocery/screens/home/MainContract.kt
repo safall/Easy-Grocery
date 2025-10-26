@@ -1,8 +1,7 @@
 package com.whitecatlabs.easygrocery.screens.home
 
-import com.whitecatlabs.easygrocery.screens.home.MainViewModel.CategoryItemUiState
 import com.whitecatlabs.easygrocery.screens.home.model.CategoryUiState
-
+import com.whitecatlabs.easygrocery.screens.home.model.CategoryItemUiState
 class MainContract {
     sealed class ViewState {
         data object Empty : ViewState()

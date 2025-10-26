@@ -1,0 +1,38 @@
+import kotlin.Boolean;
+
+CREATE TABLE IF NOT EXISTS groceryItem (
+    id TEXT NOT NULL PRIMARY KEY,
+    groceryId TEXT NOT NULL,
+    lastPurchasePrice TEXT NOT NULL,
+    isSelected INTEGER AS Boolean NOT NULL,
+    FOREIGN KEY (groceryId) REFERENCES master_grocery(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id) REFERENCES master_grocery_item(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS index_groceryItem_groceryId ON groceryItem(groceryId);
+
+selectAll:
+SELECT * FROM groceryItem;
+
+-- This replaces GroceryItemDao.fetchItemsWithSelected()
+fetchItemsWithSelected:
+SELECT
+    mgi.id AS mgi_id,
+    mgi.groceryId AS mgi_groceryId,
+    mgi.title AS mgi_title,
+    gi.id AS gi_id,
+    gi.groceryId AS gi_groceryId,
+    gi.lastPurchasePrice AS gi_lastPurchasePrice,
+    gi.isSelected AS gi_isSelected
+FROM master_grocery_item mgi
+LEFT JOIN groceryItem gi ON mgi.id = gi.id
+WHERE mgi.groceryId = ?;
+
+insert:
+INSERT OR REPLACE INTO groceryItem(id, groceryId, lastPurchasePrice, isSelected)
+VALUES (?, ?, ?, ?);
+
+updateSelected:
+UPDATE groceryItem
+SET isSelected = ?
+WHERE id = ?;

@@ -1,0 +1,32 @@
+import kotlin.Boolean;
+
+CREATE TABLE IF NOT EXISTS master_grocery (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    color TEXT NOT NULL
+);
+
+selectAll:
+SELECT * FROM master_grocery;
+
+selectById:
+SELECT * FROM master_grocery WHERE id = ?;
+
+-- This replaces MasterGroceryDao.fetchAll()
+-- Returns master_grocery with optional groceryCategory
+fetchAllWithSelection:
+SELECT
+    mg.id AS mg_id,
+    mg.title AS mg_title,
+    mg.color AS mg_color,
+    gc.id AS gc_id,
+    gc.isSelected AS gc_isSelected
+FROM master_grocery mg
+LEFT JOIN groceryCategory gc ON mg.id = gc.id;
+
+insert:
+INSERT OR REPLACE INTO master_grocery(id, title, color)
+VALUES (?, ?, ?);
+
+deleteById:
+DELETE FROM master_grocery WHERE id = ?;

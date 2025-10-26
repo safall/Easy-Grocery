@@ -1,11 +1,9 @@
 package com.whitecatlabs.easygrocery
 
 import android.app.Application
-import com.whitecatlabs.easygrocery.di.allModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
-
 class EasyGroceryApp : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -18,6 +16,6 @@ class EasyGroceryApp : Application() {
 fun initKoin(config: (KoinApplication.() -> Unit)? = null) {
     startKoin {
         config?.invoke(this)
-        modules(allModules)
+        modules(allModules + platformModule())
     }
 }

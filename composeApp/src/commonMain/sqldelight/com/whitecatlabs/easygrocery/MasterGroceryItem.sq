@@ -1,0 +1,48 @@
+CREATE TABLE IF NOT EXISTS master_grocery_item (
+    id TEXT NOT NULL PRIMARY KEY,
+    groceryId TEXT NOT NULL,
+    title TEXT NOT NULL,
+    FOREIGN KEY (groceryId) REFERENCES master_grocery(id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS index_master_grocery_item_groceryId
+ON master_grocery_item(groceryId);
+
+-- ===========================
+-- Queries for master_grocery_item
+-- ===========================
+
+selectAll:
+SELECT * FROM master_grocery_item;
+
+selectById:
+SELECT * FROM master_grocery_item
+WHERE id = ?;
+
+selectByGroceryId:
+SELECT * FROM master_grocery_item
+WHERE groceryId = ?;
+
+insert:
+INSERT OR REPLACE INTO master_grocery_item(id, groceryId, title)
+VALUES (?, ?, ?);
+
+update:
+UPDATE master_grocery_item
+SET groceryId = ?, title = ?
+WHERE id = ?;
+
+deleteById:
+DELETE FROM master_grocery_item
+WHERE id = ?;
+
+deleteByGroceryId:
+DELETE FROM master_grocery_item
+WHERE groceryId = ?;
+
+deleteAll:
+DELETE FROM master_grocery_item;
+
+count:
+SELECT COUNT(*) FROM master_grocery_item;
