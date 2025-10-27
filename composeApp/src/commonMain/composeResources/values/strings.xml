@@ -2,4 +2,6 @@
     <string name="app_name">My App</string>
     <string name="error_message">Error</string>
     <string name="empty_category_item_message">Your selection items is empty.\n Click ✏️ edit icon on top right to get started!</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="contact_us">Contact Us</string>
 </resources>
