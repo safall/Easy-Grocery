@@ -35,6 +35,7 @@ import com.whitecatlabs.easygrocery.screens.settings.SettingsScreenNavigation
 import com.whitecatlabs.easygrocery.screens.settings.settings
 import com.whitecatlabs.easygrocery.ui.BottomNavigationBar
 import com.whitecatlabs.easygrocery.ui.NavItem
+import com.whitecatlabs.easygrocery.ui.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
 
 val navBarItems = listOf(
@@ -60,7 +61,7 @@ val navBarItems = listOf(
 
 @Composable
 fun App() {
-    MaterialTheme {
+    AppTheme {
         GroceryApp()
     }
 }
