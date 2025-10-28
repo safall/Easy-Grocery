@@ -126,7 +126,7 @@ private fun GroceryApp(navController: NavHostController = rememberNavController(
             main(
                 title = { appBarTitle = it },
                 navigateToAddCategory = { },
-                updateSelectedCategory = { id, title -> },
+                updateSelectedCategory = { id, title -> activityViewModel.selectedCategory = (Category(id, title)) },
                 navigateBack = { navController.navigateUp() },
             )
 
