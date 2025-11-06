@@ -9,21 +9,21 @@ import com.whitecatlabs.easygrocery.screens.home.MainViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val appModule = module {
-    viewModel { ActivityViewModel() }
-    viewModel { MainViewModel(get()) }
-    viewModel { AddCategoryViewModel(get()) }
-    viewModel { ItemsViewModel(get(), get()) }
-}
+val appModule =
+    module {
+        viewModel { ActivityViewModel() }
+        viewModel { MainViewModel(get()) }
+        viewModel { AddCategoryViewModel(get()) }
+        viewModel { ItemsViewModel(get(), get()) }
+    }
 
-val databaseModule = module {
-    single<SqlDriver> { get<DatabaseDriverFactory>().createDriver() }
-    single<EasyGroceryDatabase> { provideSqlDelightDatabase(get()) }
-    single<GroceryRepository> { GroceryRepositoryDefault(get()) }
-}
+val databaseModule =
+    module {
+        single<SqlDriver> { get<DatabaseDriverFactory>().createDriver() }
+        single<EasyGroceryDatabase> { provideSqlDelightDatabase(get()) }
+        single<GroceryRepository> { GroceryRepositoryDefault(get()) }
+    }
 
-fun provideSqlDelightDatabase(driver: SqlDriver): EasyGroceryDatabase {
-    return EasyGroceryDatabase(driver)
-}
+fun provideSqlDelightDatabase(driver: SqlDriver): EasyGroceryDatabase = EasyGroceryDatabase(driver)
 
 val allModules = listOf(appModule, databaseModule)

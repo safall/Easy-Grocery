@@ -53,9 +53,10 @@ fun SettingsItem(
         modifier = modifier,
         onClick = onClick,
         enabled = enabled,
-        colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground,
-        ),
+        colors =
+            ButtonDefaults.textButtonColors(
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            ),
         content = {
             Text(
                 modifier = Modifier.weight(1f),
@@ -73,7 +74,7 @@ private fun SettingsPreview() {
             SettingsScreen(
                 navigateToContactUs = {},
                 navigateToPrivacyPolicyPage = {},
-                modifier = Modifier.consumeWindowInsets(innerPadding)
+                modifier = Modifier.consumeWindowInsets(innerPadding),
             )
         }
     }

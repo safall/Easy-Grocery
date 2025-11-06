@@ -36,9 +36,10 @@ fun BottomNavigationBar(
         tonalElevation = 0.dp,
         content = {
             items.forEachIndexed { _, item ->
-                val isSelected = currentDestination?.hierarchy?.any {
-                    it.route == item.route::class.qualifiedName
-                } == true
+                val isSelected =
+                    currentDestination?.hierarchy?.any {
+                        it.route == item.route::class.qualifiedName
+                    } == true
 
                 NavBarItem(
                     icon = {
@@ -81,13 +82,14 @@ fun RowScope.NavBarItem(
         enabled = enabled,
         label = label,
         alwaysShowLabel = alwaysShowLabel,
-        colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = NavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = NavigationDefaults.navigationContentColor(),
-            selectedTextColor = NavigationDefaults.navigationSelectedItemColor(),
-            unselectedTextColor = NavigationDefaults.navigationContentColor(),
-            indicatorColor = NavigationDefaults.navigationIndicatorColor(),
-        ),
+        colors =
+            NavigationBarItemDefaults.colors(
+                selectedIconColor = NavigationDefaults.navigationSelectedItemColor(),
+                unselectedIconColor = NavigationDefaults.navigationContentColor(),
+                selectedTextColor = NavigationDefaults.navigationSelectedItemColor(),
+                unselectedTextColor = NavigationDefaults.navigationContentColor(),
+                indicatorColor = NavigationDefaults.navigationIndicatorColor(),
+            ),
     )
 }
 

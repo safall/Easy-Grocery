@@ -18,18 +18,19 @@ import kotlinx.coroutines.launch
 class AddCategoryViewModel(
     private val repository: GroceryRepository,
 ) : BaseViewModel<ViewState, AddCategoryContract.Event>() {
-
-    override val uiState: StateFlow<ViewState> = getAllCategories()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = Loading,
-        )
+    override val uiState: StateFlow<ViewState> =
+        getAllCategories()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = Loading,
+            )
 
     @Suppress("TooGenericExceptionCaught")
-    private fun getAllCategories(): Flow<ViewState> {
-        return try {
-            repository.getAllMasterCategories()
+    private fun getAllCategories(): Flow<ViewState> =
+        try {
+            repository
+                .getAllMasterCategories()
                 .map { result ->
                     ViewState.Result(result.map { it.toUiState() })
                 }
@@ -37,7 +38,6 @@ class AddCategoryViewModel(
             e.printStackTrace()
             flow { ViewState.Error }
         }
-    }
 
     override fun consumeEvent(event: AddCategoryContract.Event) {
         when (event) {
@@ -50,9 +50,9 @@ class AddCategoryViewModel(
                         listOf(
                             GroceryCategoryEntity(
                                 id = item.id,
-                                isSelected = event.isSelected
-                            )
-                        )
+                                isSelected = event.isSelected,
+                            ),
+                        ),
                     )
                 }
             }

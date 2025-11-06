@@ -2,11 +2,10 @@ package com.whitecatlabs.easygrocery.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import com.whitecatlabs.easygrocery.resources.PoppinsRegular
-import com.whitecatlabs.easygrocery.resources.Res
-
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.whitecatlabs.easygrocery.resources.PoppinsRegular
+import com.whitecatlabs.easygrocery.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 

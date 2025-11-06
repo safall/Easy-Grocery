@@ -38,10 +38,11 @@ fun ItemsScreen(
                 )
             }
             is ItemsContract.ViewState.Loading -> CircularProgressIndicator(modifier = Modifier.size(40.dp))
-            is ItemsContract.ViewState.Result -> Content(
-                items = viewState.items,
-                onEvent = onEvent,
-            )
+            is ItemsContract.ViewState.Result ->
+                Content(
+                    items = viewState.items,
+                    onEvent = onEvent,
+                )
         }
     }
 }

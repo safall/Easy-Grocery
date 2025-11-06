@@ -27,8 +27,8 @@ import com.whitecatlabs.easygrocery.resources.empty_category_item_message
 import com.whitecatlabs.easygrocery.resources.error_message
 import com.whitecatlabs.easygrocery.screens.home.MainContract.Event
 import com.whitecatlabs.easygrocery.screens.home.MainContract.ViewState
-import com.whitecatlabs.easygrocery.screens.home.model.CategoryUiState
 import com.whitecatlabs.easygrocery.screens.home.model.CategoryItemUiState
+import com.whitecatlabs.easygrocery.screens.home.model.CategoryUiState
 import com.whitecatlabs.easygrocery.ui.CategoryItemRow
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource

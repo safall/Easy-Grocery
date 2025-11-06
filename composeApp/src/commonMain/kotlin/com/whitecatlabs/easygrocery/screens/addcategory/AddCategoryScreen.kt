@@ -24,9 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.whitecatlabs.easygrocery.screens.addcategory.model.AddCategoryUiState
 import com.whitecatlabs.easygrocery.resources.Res
 import com.whitecatlabs.easygrocery.resources.error_message
+import com.whitecatlabs.easygrocery.screens.addcategory.model.AddCategoryUiState
 import com.whitecatlabs.easygrocery.ui.ColorUtil.parseColor
 import org.jetbrains.compose.resources.stringResource
 
@@ -41,18 +41,20 @@ fun AddCategoryScreen(
         contentAlignment = Alignment.Center,
     ) {
         when (viewState) {
-            is AddCategoryContract.ViewState.Error -> Text(
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                text = stringResource(Res.string.error_message),
-                color = MaterialTheme.colorScheme.error,
-            )
+            is AddCategoryContract.ViewState.Error ->
+                Text(
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    text = stringResource(Res.string.error_message),
+                    color = MaterialTheme.colorScheme.error,
+                )
 
             is AddCategoryContract.ViewState.Loading -> CircularProgressIndicator(modifier = Modifier.size(40.dp))
-            is AddCategoryContract.ViewState.Result -> Content(
-                viewState.items,
-                onEvent,
-            )
+            is AddCategoryContract.ViewState.Result ->
+                Content(
+                    viewState.items,
+                    onEvent,
+                )
         }
     }
 }
@@ -67,9 +69,10 @@ private fun Content(
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             items.forEach {
@@ -88,21 +91,24 @@ fun Grocery(
     onEvent: (AddCategoryContract.Event) -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .height(40.dp)
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .height(40.dp)
+                .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Box(
-            modifier = Modifier
-                .size(30.dp)
-                .clip(RoundedCornerShape(size = 8.dp)),
+            modifier =
+                Modifier
+                    .size(30.dp)
+                    .clip(RoundedCornerShape(size = 8.dp)),
         ) {
             Box(
-                modifier = Modifier
-                    .size(30.dp)
-                    .background(item.color.parseColor())
+                modifier =
+                    Modifier
+                        .size(30.dp)
+                        .background(item.color.parseColor()),
             )
         }
         Text(
@@ -127,12 +133,13 @@ fun Grocery(
 private fun AddCategoryScreenPreview() {
     MaterialTheme {
         AddCategoryScreen(
-            viewState = AddCategoryContract.ViewState.Result(
-                listOf(
-                    AddCategoryUiState("1", "Apple", color = "#0f0f0f0f", isSelected = true),
-                    AddCategoryUiState("2", "Orange", color = "#0f0f0f0f", isSelected = true),
+            viewState =
+                AddCategoryContract.ViewState.Result(
+                    listOf(
+                        AddCategoryUiState("1", "Apple", color = "#0f0f0f0f", isSelected = true),
+                        AddCategoryUiState("2", "Orange", color = "#0f0f0f0f", isSelected = true),
+                    ),
                 ),
-            ),
         ) {}
     }
 }

@@ -18,16 +18,16 @@ class ItemsViewModel(
     id: String,
     private val repository: GroceryRepository,
 ) : BaseViewModel<ViewState, ItemsContract.Event>() {
-
-    override val uiState: StateFlow<ViewState> = getAllItems(id).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = Loading,
-    )
+    override val uiState: StateFlow<ViewState> =
+        getAllItems(id).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = Loading,
+        )
 
     @Suppress("TooGenericExceptionCaught")
-    private fun getAllItems(id: String): Flow<ViewState> {
-        return try {
+    private fun getAllItems(id: String): Flow<ViewState> =
+        try {
             repository.getItemsWithSelection(id).map { items ->
                 ViewState.Result(items.map { it.toCategoryItemUiState() })
             }
@@ -35,17 +35,17 @@ class ItemsViewModel(
             e.printStackTrace()
             flow { ViewState.Error }
         }
-    }
 
     override fun consumeEvent(event: ItemsContract.Event) {
         when (event) {
-            is ItemsContract.Event.ItemCheckedEvent -> viewModelScope.launch {
-                repository.updateItemSelection(
-                    event.groceryId,
-                    event.id,
-                    event.isChecked,
-                )
-            }
+            is ItemsContract.Event.ItemCheckedEvent ->
+                viewModelScope.launch {
+                    repository.updateItemSelection(
+                        event.groceryId,
+                        event.id,
+                        event.isChecked,
+                    )
+                }
 
             else -> Unit
         }
