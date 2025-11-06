@@ -11,13 +11,11 @@ import org.koin.compose.viewmodel.koinViewModel
 data object MainScreenNavigation
 
 fun NavGraphBuilder.main(
-    title: (String) -> Unit,
     navigateToAddCategory: () -> Unit,
     updateSelectedCategory: (String, String) -> Unit,
     navigateBack: () -> Unit,
 ) {
     composable<MainScreenNavigation> {
-        title("Home")
         val viewModel: MainViewModel = koinViewModel()
         val viewState = viewModel.uiState.collectAsStateWithLifecycle().value
         MainScreen(viewState = viewState) { event ->

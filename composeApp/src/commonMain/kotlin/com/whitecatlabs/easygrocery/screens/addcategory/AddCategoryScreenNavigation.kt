@@ -10,9 +10,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @Serializable
 data object AddCategoryScreenNavigation
 
-fun NavGraphBuilder.addCategory(navigateUp: () -> Unit, title: (String) -> Unit) {
+fun NavGraphBuilder.addCategory(navigateUp: () -> Unit) {
     composable<AddCategoryScreenNavigation> {
-        title("Add Category")
         val viewModel = koinViewModel<AddCategoryViewModel>()
         val viewState = viewModel.uiState.collectAsStateWithLifecycle().value
         AddCategoryScreen(viewState) { event ->

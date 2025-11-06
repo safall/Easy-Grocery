@@ -10,13 +10,15 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Serializable
-data class CategoryItemsScreenNavigation(val id: String, val title: String)
+data class CategoryItemsScreenNavigation(
+    val id: String,
+    val title: String,
+)
 
-fun NavGraphBuilder.categoryItems(navigateUp: () -> Unit, title: (String) -> Unit) {
+fun NavGraphBuilder.categoryItems(navigateUp: () -> Unit) {
     composable<CategoryItemsScreenNavigation> {
         val arguments = it.toRoute<CategoryItemsScreenNavigation>()
         val viewModel: ItemsViewModel = koinViewModel { parametersOf(arguments.id) }
-        title(arguments.title)
         val viewState = viewModel.uiState.collectAsStateWithLifecycle().value
         ItemsScreen(viewState = viewState) { event ->
             when (event) {
@@ -28,6 +30,9 @@ fun NavGraphBuilder.categoryItems(navigateUp: () -> Unit, title: (String) -> Uni
     }
 }
 
-fun NavController.navigateToCategoryItems(id: String, title: String) {
+fun NavController.navigateToCategoryItems(
+    id: String,
+    title: String,
+) {
     navigate(CategoryItemsScreenNavigation(id, title))
 }

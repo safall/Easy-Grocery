@@ -11,7 +11,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -20,13 +19,17 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.whitecatlabs.easygrocery.screens.addcategory.AddCategoryScreenNavigation
 import com.whitecatlabs.easygrocery.screens.addcategory.addCategory
+import com.whitecatlabs.easygrocery.screens.categoryitems.CategoryItemsScreenNavigation
 import com.whitecatlabs.easygrocery.screens.categoryitems.categoryItems
 import com.whitecatlabs.easygrocery.screens.categoryitems.navigateToCategoryItems
 import com.whitecatlabs.easygrocery.screens.home.MainScreenNavigation
@@ -38,26 +41,27 @@ import com.whitecatlabs.easygrocery.ui.NavItem
 import com.whitecatlabs.easygrocery.ui.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
 
-val navBarItems = listOf(
-    NavItem(
-        icon = Icons.Default.Home,
-        selectedIcon = Icons.Default.Home,
-        route = MainScreenNavigation,
-        title = "Home",
-    ),
-    NavItem(
-        icon = Icons.AutoMirrored.Filled.List,
-        selectedIcon = Icons.AutoMirrored.Filled.List,
-        route = AddCategoryScreenNavigation,
-        title = "Categories",
-    ),
-    NavItem(
-        icon = Icons.Default.Settings,
-        selectedIcon = Icons.Default.Settings,
-        route = SettingsScreenNavigation,
-        title = "Settings",
-    ),
-)
+val navBarItems =
+    listOf(
+        NavItem(
+            icon = Icons.Default.Home,
+            selectedIcon = Icons.Default.Home,
+            route = MainScreenNavigation,
+            title = "Home",
+        ),
+        NavItem(
+            icon = Icons.AutoMirrored.Filled.List,
+            selectedIcon = Icons.AutoMirrored.Filled.List,
+            route = AddCategoryScreenNavigation,
+            title = "Categories",
+        ),
+        NavItem(
+            icon = Icons.Default.Settings,
+            selectedIcon = Icons.Default.Settings,
+            route = SettingsScreenNavigation,
+            title = "Settings",
+        ),
+    )
 
 @Composable
 fun App() {
@@ -70,7 +74,6 @@ fun App() {
 @Suppress("LongMethod")
 @Composable
 private fun GroceryApp(navController: NavHostController = rememberNavController()) {
-    var appBarTitle: String by remember { mutableStateOf("Home") }
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentDestination = navBackStackEntry?.destination
     val activityViewModel: ActivityViewModel = koinViewModel()
@@ -82,7 +85,7 @@ private fun GroceryApp(navController: NavHostController = rememberNavController(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = appBarTitle,
+                        text = navBackStackEntry.getTitle(),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
@@ -99,20 +102,20 @@ private fun GroceryApp(navController: NavHostController = rememberNavController(
                     }
                 },
                 actions = {
-                        when (currentDestination?.route) {
-                            MainScreenNavigation::class.qualifiedName -> {
-                                IconButton(
-                                    onClick = {
-                                        navController.navigateToCategoryItems(
-                                            activityViewModel.selectedCategory.id,
-                                            activityViewModel.selectedCategory.title,
-                                        )
-                                    },
-                                ) {
-                                    Icon(Icons.Default.Edit, contentDescription = "Edit")
-                                }
+                    when (currentDestination?.route) {
+                        MainScreenNavigation::class.qualifiedName -> {
+                            IconButton(
+                                onClick = {
+                                    navController.navigateToCategoryItems(
+                                        activityViewModel.selectedCategory.id,
+                                        activityViewModel.selectedCategory.title,
+                                    )
+                                },
+                            ) {
+                                Icon(Icons.Default.Edit, contentDescription = "Edit")
                             }
                         }
+                    }
                 },
             )
         },
@@ -124,24 +127,16 @@ private fun GroceryApp(navController: NavHostController = rememberNavController(
             startDestination = MainScreenNavigation,
         ) {
             main(
-                title = { appBarTitle = it },
                 navigateToAddCategory = { },
                 updateSelectedCategory = { id, title -> activityViewModel.selectedCategory = (Category(id, title)) },
                 navigateBack = { navController.navigateUp() },
             )
 
-            addCategory(
-                title = { appBarTitle = it },
-                navigateUp = { navController.navigateUp() },
-            )
+            addCategory(navigateUp = { navController.navigateUp() })
 
-            categoryItems(
-                title = { appBarTitle = it },
-                navigateUp = { navController.navigateUp() },
-            )
+            categoryItems(navigateUp = { navController.navigateUp() })
 
             settings(
-                title = { appBarTitle = it },
                 navigateToPrivacyPolicy = {
                     uriHandler.openUri("https://whitecatlabs.github.io/")
                 },
@@ -153,13 +148,16 @@ private fun GroceryApp(navController: NavHostController = rememberNavController(
     }
 }
 
-@Suppress("TrailingCommaOnDeclarationSite", "internal:trailing-comma-on-declaration-site")
-private fun NavDestination?.shouldShowBackButton(): Boolean =
-    when (this?.route) {
-        MainScreenNavigation::class.qualifiedName,
-        AddCategoryScreenNavigation::class.qualifiedName,
-        SettingsScreenNavigation::class.qualifiedName,
-            -> false
+fun NavDestination?.shouldShowBackButton(): Boolean = this?.let { hasRoute(CategoryItemsScreenNavigation::class) } ?: false
 
-        else -> true
+fun NavBackStackEntry?.getTitle(): String {
+    if (this == null) return ""
+    return when {
+        destination.hasRoute(MainScreenNavigation::class) -> "Home"
+        destination.hasRoute(CategoryItemsScreenNavigation::class) ->
+            toRoute<CategoryItemsScreenNavigation>().title
+        destination.hasRoute(SettingsScreenNavigation::class) -> "Settings"
+        destination.hasRoute(AddCategoryScreenNavigation::class) -> "Categories"
+        else -> ""
     }
+}

@@ -11,10 +11,8 @@ data object SettingsScreenNavigation
 fun NavGraphBuilder.settings(
     navigateToContactUs: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
-    title: (String) -> Unit,
 ) {
     composable<SettingsScreenNavigation> {
-        title("Settings")
         SettingsScreen(
             navigateToContactUs = navigateToContactUs,
             navigateToPrivacyPolicyPage = navigateToPrivacyPolicy,
